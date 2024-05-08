@@ -28,11 +28,18 @@ class StoryBlock {
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI SzeneText;
-    public Button Option_A;
-    public Button Option_B;
-    public Button Option_C;
+    [HideInInspector] public Button Option_A;
+    [HideInInspector] public Button Option_B;
+    [HideInInspector] public Button Option_C;
     StoryBlock currentBlock;
     
+    void Awake()
+    {
+        Option_A = GameObject.Find("Button_A").GetComponent<Button>();
+        Option_B = GameObject.Find("Button_B").GetComponent<Button>();
+        Option_C = GameObject.Find("Button_C").GetComponent<Button>();
+    }
+
     static StoryBlock block3 = new StoryBlock("Freut mich!", "", "", "");
     static StoryBlock block2 = new StoryBlock("Oh", "", "", "");
     static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "schlecht", "", block3, block2);
