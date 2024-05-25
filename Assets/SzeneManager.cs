@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class SzeneManager : MonoBehaviour
 {
-    public Button rathausButton; 
-    public string sceneName;     
+    [HideInInspector] public Button rathausButton; 
+     
 
     void Start()
     {
@@ -16,8 +16,14 @@ public class SzeneManager : MonoBehaviour
         
     }
 
+    void Awake()
+    {
+        // Automatische Zuweisung des Buttons
+        rathausButton = GameObject.Find("Rathaus").GetComponent<Button>();
+    }
+
     void SwitchScene()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene("Rathaus");
     }
 }

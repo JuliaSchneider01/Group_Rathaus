@@ -27,17 +27,31 @@ class StoryBlock {
 
 public class GameManager : MonoBehaviour
 {
-    public TextMeshProUGUI SzeneText;
+    
+    public Text StartText;
+    [HideInInspector] public Button ContinueButton;
+    [HideInInspector] public Button BackButton;
     [HideInInspector] public Button Option_A;
     [HideInInspector] public Button Option_B;
     [HideInInspector] public Button Option_C;
+    [HideInInspector] public GameObject ScenePanel;
     StoryBlock currentBlock;
     
     void Awake()
     {
+        // Automatische Zuweisung des Buttons
         Option_A = GameObject.Find("Button_A").GetComponent<Button>();
         Option_B = GameObject.Find("Button_B").GetComponent<Button>();
         Option_C = GameObject.Find("Button_C").GetComponent<Button>();
+        ContinueButton = GameObject.Find("Continue").GetComponent<Button>();
+        BackButton = GameObject.Find("BackToAudio").GetComponent<Button>();
+        ScenePanel = GameObject.Find("ScenePanel");
+
+        // Verstecke die UI-Story Elemente
+        ScenePanel.gameObject.SetActive(false);
+        Option_A.gameObject.SetActive(false);
+        Option_B.gameObject.SetActive(false);
+        Option_C.gameObject.SetActive(false);
     }
 
     static StoryBlock block3 = new StoryBlock("Freut mich!", "", "", "");
@@ -48,11 +62,29 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-       DisplayBlock(block1);
+        StartText.text = "Startbildschirm";
+       ContinueButton.onClick.AddListener(OnContinueButtonClicked);
+    }
+
+    void OnContinueButtonClicked()
+    {
+        // Verstecke den Starttext und den Weiter-Button
+        StartText.gameObject.SetActive(false);
+        ContinueButton.gameObject.SetActive(false);
+        BackButton.gameObject.SetActive(false);
+
+        // Zeige die Story-UI-Elemente
+        ScenePanel.gameObject.SetActive(true);
+        Option_A.gameObject.SetActive(true);
+        Option_B.gameObject.SetActive(true);
+        Option_C.gameObject.SetActive(true);
+
+        // Zeige den ersten StoryBlock
+        DisplayBlock(block1);
     }
 
     void DisplayBlock(StoryBlock block){
-        SzeneText.text = block.story;
+        ScenePanel.GetComponentInChildren<TMP_Text>().text = block.story;
         Option_A.GetComponentInChildren<TMP_Text>().text = block.optionA_Text;
         Option_B.GetComponentInChildren<TMP_Text>().text = block.optionB_Text;
         Option_C.GetComponentInChildren<TMP_Text>().text = block.optionC_Text;
