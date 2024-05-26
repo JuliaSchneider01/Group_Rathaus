@@ -28,7 +28,7 @@ class StoryBlock {
 public class GameManager : MonoBehaviour
 {
     
-    public Text StartText;
+     public Text StartText;
     [HideInInspector] public Button ContinueButton;
     [HideInInspector] public Button BackButton;
     [HideInInspector] public Button Option_A;
@@ -36,7 +36,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Button Option_C;
     [HideInInspector] public GameObject ScenePanel;
     StoryBlock currentBlock;
-    
+
+    // Reference to FirebaseManager
+    private FirebaseManager firebaseManager;
+
     void Awake()
     {
         // Automatische Zuweisung des Buttons
@@ -52,18 +55,22 @@ public class GameManager : MonoBehaviour
         Option_A.gameObject.SetActive(false);
         Option_B.gameObject.SetActive(false);
         Option_C.gameObject.SetActive(false);
+
+        // Initialize FirebaseManager
+        firebaseManager = GetComponent<FirebaseManager>();
     }
 
     static StoryBlock block3 = new StoryBlock("Freut mich!", "", "", "");
     static StoryBlock block2 = new StoryBlock("Oh", "", "", "");
-    static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "schlecht", "", block3, block2);
-
-   
+    static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "Schlecht", "", block3, block2);
 
     void Start()
     {
         StartText.text = "Startbildschirm";
-       ContinueButton.onClick.AddListener(OnContinueButtonClicked);
+        ContinueButton.onClick.AddListener(OnContinueButtonClicked);
+        Option_A.onClick.AddListener(ButtonA_clicked);
+        Option_B.onClick.AddListener(ButtonB_clicked);
+        Option_C.onClick.AddListener(ButtonC_clicked);
     }
 
     void OnContinueButtonClicked()
@@ -83,27 +90,32 @@ public class GameManager : MonoBehaviour
         DisplayBlock(block1);
     }
 
-    void DisplayBlock(StoryBlock block){
+    void DisplayBlock(StoryBlock block)
+    {
         ScenePanel.GetComponentInChildren<TMP_Text>().text = block.story;
         Option_A.GetComponentInChildren<TMP_Text>().text = block.optionA_Text;
         Option_B.GetComponentInChildren<TMP_Text>().text = block.optionB_Text;
         Option_C.GetComponentInChildren<TMP_Text>().text = block.optionC_Text;
 
         currentBlock = block;
-
     }
 
-    public void ButtonA_clicked(){
+    public void ButtonA_clicked()
+    {
         DisplayBlock(currentBlock.optionA_Block);
+        firebaseManager.SendChoiceToFirebase("A");
     }
-    
-    public void ButtonB_clicked(){
+
+    public void ButtonB_clicked()
+    {
         DisplayBlock(currentBlock.optionB_Block);
+        firebaseManager.SendChoiceToFirebase("B");
     }
-    
-    public void ButtonC_clicked(){
+
+    public void ButtonC_clicked()
+    {
         DisplayBlock(currentBlock.optionC_Block);
-        
+        firebaseManager.SendChoiceToFirebase("C");
     }
 
 }
