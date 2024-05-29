@@ -21,7 +21,6 @@ class StoryBlock {
 public class GameManager : MonoBehaviour
 {
     public Text StartText;
-    public Text result;
     [HideInInspector] public Button ContinueButton;
     [HideInInspector] public Button BackButton;
     [HideInInspector] public Button Option_A;
@@ -71,7 +70,6 @@ public class GameManager : MonoBehaviour
     void OnContinueButtonClicked()
     {
         // Verstecke den Starttext und den Weiter-Button
-        result.gameObject.SetActive(false);
         StartText.gameObject.SetActive(false);
         ContinueButton.gameObject.SetActive(false);
         BackButton.gameObject.SetActive(false);
@@ -169,7 +167,6 @@ public class GameManager : MonoBehaviour
 
         DisplayBlock(block2);
         Option_C.gameObject.SetActive(false);
-        result.gameObject.SetActive(true);
 
     }
 }
