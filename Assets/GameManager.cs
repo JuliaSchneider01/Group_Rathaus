@@ -49,8 +49,7 @@ public class GameManager : MonoBehaviour
         Option_A.gameObject.SetActive(false);
         Option_B.gameObject.SetActive(false);
         Option_C.gameObject.SetActive(false);
-        //result.gameObject.SetActive(false);
-
+        
         // Initialize FirebaseManager
         firebaseManager = GetComponent<FirebaseManager>();
     }
