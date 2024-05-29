@@ -96,8 +96,14 @@ public class FirebaseManager : MonoBehaviour
 
     public string GetMostChosenOption(OptionCounts optionCounts)
     {
-        string mostChosenOption = "A";
-        int maxCount = optionCounts.A;
+        string mostChosenOption = "";
+        int maxCount = 0;
+
+        if (optionCounts.A > maxCount)
+        {
+            mostChosenOption = "A";
+            maxCount = optionCounts.B;
+        }
 
         if (optionCounts.B > maxCount)
         {
