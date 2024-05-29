@@ -9,26 +9,19 @@ class StoryBlock {
     public string optionA_Text;
     public string optionB_Text;
     public string optionC_Text;
-    public StoryBlock optionA_Block;
-    public StoryBlock optionB_Block;
-    public StoryBlock optionC_Block;
 
-    public StoryBlock(string story, string optionA_Text = "", string optionB_Text = "", string optionC_Text ="", 
-                        StoryBlock optionA_Block =null, StoryBlock optionB_Block = null, StoryBlock optionC_Block = null){
+    public StoryBlock(string story, string optionA_Text = "", string optionB_Text = "", string optionC_Text = "") {
         this.story = story;
         this.optionA_Text = optionA_Text;
         this.optionB_Text = optionB_Text;
         this.optionC_Text = optionC_Text;
-        this.optionA_Block = optionA_Block;
-        this.optionB_Block = optionB_Block;
-        this.optionC_Block = optionC_Block;
     }
 }
 
 public class GameManager : MonoBehaviour
 {
-    
-     public Text StartText;
+    public Text StartText;
+    public Text result;
     [HideInInspector] public Button ContinueButton;
     [HideInInspector] public Button BackButton;
     [HideInInspector] public Button Option_A;
@@ -39,10 +32,12 @@ public class GameManager : MonoBehaviour
 
     // Reference to FirebaseManager
     private FirebaseManager firebaseManager;
+    private bool block2ButtonPressed = false;
 
     void Awake()
     {
         // Automatische Zuweisung des Buttons
+        StartText.text = "Startbildschirm";
         Option_A = GameObject.Find("Button_A").GetComponent<Button>();
         Option_B = GameObject.Find("Button_B").GetComponent<Button>();
         Option_C = GameObject.Find("Button_C").GetComponent<Button>();
@@ -55,18 +50,18 @@ public class GameManager : MonoBehaviour
         Option_A.gameObject.SetActive(false);
         Option_B.gameObject.SetActive(false);
         Option_C.gameObject.SetActive(false);
+        //result.gameObject.SetActive(false);
 
         // Initialize FirebaseManager
         firebaseManager = GetComponent<FirebaseManager>();
     }
 
-    static StoryBlock block3 = new StoryBlock("Freut mich!", "", "", "");
-    static StoryBlock block2 = new StoryBlock("Oh", "", "", "");
-    static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "Schlecht", "", block3, block2);
+    // Initialer StoryBlock
+    static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "Schlecht", "Mittelmäßig");
+    static StoryBlock block2 = new StoryBlock("Developermode", "Load results", "Reset", "");
 
     void Start()
     {
-        StartText.text = "Startbildschirm";
         ContinueButton.onClick.AddListener(OnContinueButtonClicked);
         Option_A.onClick.AddListener(ButtonA_clicked);
         Option_B.onClick.AddListener(ButtonB_clicked);
@@ -76,6 +71,7 @@ public class GameManager : MonoBehaviour
     void OnContinueButtonClicked()
     {
         // Verstecke den Starttext und den Weiter-Button
+        result.gameObject.SetActive(false);
         StartText.gameObject.SetActive(false);
         ContinueButton.gameObject.SetActive(false);
         BackButton.gameObject.SetActive(false);
@@ -102,20 +98,78 @@ public class GameManager : MonoBehaviour
 
     public void ButtonA_clicked()
     {
-        DisplayBlock(currentBlock.optionA_Block);
+        if(currentBlock==block1)
+        {
         firebaseManager.SendChoiceToFirebase("A");
+        DisplayNext();
+        }
+        else if (currentBlock == block2)
+        {
+            if (block2ButtonPressed)
+            {
+                firebaseManager.GetMostChosenOption();
+                block2ButtonPressed = false; // Reset the state for future use
+            }
+            else
+            {
+                block2ButtonPressed = true;
+            }
+        }
     }
 
     public void ButtonB_clicked()
     {
-        DisplayBlock(currentBlock.optionB_Block);
+        if(currentBlock==block1)
+        {
         firebaseManager.SendChoiceToFirebase("B");
+        DisplayNext();
+        }
+        else if(currentBlock==block2){
+
+            if (block2ButtonPressed)
+                {
+                    firebaseManager.ResetChoicesInFirebase();
+                    block2ButtonPressed = false; // Reset the state for future use
+                }
+                else
+                {
+                    block2ButtonPressed = true;
+                }
+        }
     }
 
     public void ButtonC_clicked()
     {
-        DisplayBlock(currentBlock.optionC_Block);
+        if(currentBlock==block1)
+        {
         firebaseManager.SendChoiceToFirebase("C");
+        DisplayNext();
+        }
     }
 
+   public void UpdateScenePanel(string mostChosenOption)
+{
+    ScenePanel.GetComponentInChildren<TMP_Text>().text = "Most chosen option: " + mostChosenOption;
+}
+
+
+    void DisplayNext()
+    {
+
+        // Hier kannst du die Logik hinzufügen, um die nächste Frage anzuzeigen
+        // Beispielsweise könntest du eine neue Frage basierend auf der getroffenen Wahl laden
+        // Im Moment wird dieselbe Frage wieder angezeigt
+
+        //if(!isDeveloper){
+        // ScenePanel.gameObject.SetActive(false);
+        // Option_A.gameObject.SetActive(false);
+        // Option_B.gameObject.SetActive(false);
+        // Option_C.gameObject.SetActive(false);
+        //}
+
+        DisplayBlock(block2);
+        Option_C.gameObject.SetActive(false);
+        result.gameObject.SetActive(true);
+
+    }
 }
