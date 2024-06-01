@@ -27,7 +27,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Button Option_B;
     [HideInInspector] public Button Option_C;
     [HideInInspector] public GameObject ScenePanel;
+    [HideInInspector] public InputField Passwordfield;
     StoryBlock currentBlock;
+    public bool isDeveloper;
 
     // Reference to FirebaseManager
     private FirebaseManager firebaseManager;
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        isDeveloper = false;
         // Automatische Zuweisung des Buttons
         StartText.text = "Startbildschirm";
         Option_A = GameObject.Find("Button_A").GetComponent<Button>();
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
         ContinueButton = GameObject.Find("Continue").GetComponent<Button>();
         BackButton = GameObject.Find("BackToAudio").GetComponent<Button>();
         ScenePanel = GameObject.Find("ScenePanel");
+        Passwordfield = GameObject.Find("Passwordfield").GetComponent<InputField>();
 
         // Verstecke die UI-Story Elemente
         ScenePanel.gameObject.SetActive(false);
@@ -64,6 +68,8 @@ public class GameManager : MonoBehaviour
         Option_A.onClick.AddListener(ButtonA_clicked);
         Option_B.onClick.AddListener(ButtonB_clicked);
         Option_C.onClick.AddListener(ButtonC_clicked);
+
+        Passwordfield.onValueChanged.AddListener(delegate { PasswordInputFieldChanged(Passwordfield.text); });
     }
 
     void OnContinueButtonClicked()
@@ -72,6 +78,7 @@ public class GameManager : MonoBehaviour
         StartText.gameObject.SetActive(false);
         ContinueButton.gameObject.SetActive(false);
         BackButton.gameObject.SetActive(false);
+        Passwordfield.gameObject.SetActive(false);
 
         // Zeige die Story-UI-Elemente
         ScenePanel.gameObject.SetActive(true);
@@ -149,6 +156,15 @@ public class GameManager : MonoBehaviour
     ScenePanel.GetComponentInChildren<TMP_Text>().text = "Most chosen option: " + mostChosenOption;
 }
 
+    public void PasswordInputFieldChanged(string newText)
+        {
+            if (newText == "LTT")
+        {
+            isDeveloper = true; 
+            Debug.Log("Passwort korrekt!");
+        }
+        
+        }
 
     void DisplayNext()
     {
@@ -157,12 +173,12 @@ public class GameManager : MonoBehaviour
         // Beispielsweise könntest du eine neue Frage basierend auf der getroffenen Wahl laden
         // Im Moment wird dieselbe Frage wieder angezeigt
 
-        //if(!isDeveloper){
-        // ScenePanel.gameObject.SetActive(false);
-        // Option_A.gameObject.SetActive(false);
-        // Option_B.gameObject.SetActive(false);
-        // Option_C.gameObject.SetActive(false);
-        //}
+        if(!isDeveloper){
+            ScenePanel.gameObject.SetActive(false);
+            Option_A.gameObject.SetActive(false);
+            Option_B.gameObject.SetActive(false);
+            Option_C.gameObject.SetActive(false);
+        }
 
         DisplayBlock(block2);
         Option_C.gameObject.SetActive(false);
