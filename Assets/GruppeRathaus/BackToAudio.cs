@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+namespace GruppeRathaus{
+
 public class BackToAudio : MonoBehaviour
 {
     [HideInInspector] public Button backButton;  // Der "Zurück" Button, um zur "Audio" Szene zu wechseln
@@ -26,3 +28,6 @@ public class BackToAudio : MonoBehaviour
         SceneManager.LoadScene("Audio");
     }
 }
+}
+
+

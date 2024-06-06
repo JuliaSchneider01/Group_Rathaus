@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace GruppeRathaus{
+
 public class AudioController : MonoBehaviour
 {
     public AudioSource audioSource; 
@@ -68,3 +70,6 @@ public class AudioController : MonoBehaviour
     }
 }
 }
+
+}
+

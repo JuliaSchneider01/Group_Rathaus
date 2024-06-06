@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SzeneManager : MonoBehaviour
+namespace GruppeRathaus{
+    public class SzeneManager : MonoBehaviour
 {
     [HideInInspector] public Button rathausButton; 
      
@@ -26,4 +27,6 @@ public class SzeneManager : MonoBehaviour
     {
         SceneManager.LoadScene("Rathaus");
     }
+}
+
 }

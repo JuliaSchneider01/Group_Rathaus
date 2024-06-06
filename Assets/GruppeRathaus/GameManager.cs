@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro; 
 
-class StoryBlock {
+namespace GruppeRathaus{
+    class StoryBlock {
     public string story;
     public string optionA_Text;
     public string optionB_Text;
@@ -184,4 +185,6 @@ public class GameManager : MonoBehaviour
         Option_C.gameObject.SetActive(false);
 
     }
+}
+
 }

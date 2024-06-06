@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
 
-public class FirebaseManager : MonoBehaviour
+namespace GruppeRathaus{
+    public class FirebaseManager : MonoBehaviour
 {
     public GameManager gameManager;
     // Firebase URL (replace with your actual Firebase URL)
@@ -152,3 +153,5 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 }
+}
+
