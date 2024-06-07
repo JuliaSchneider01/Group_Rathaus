@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         isDeveloper = false;
         // Automatische Zuweisung des Buttons
-        StartText.text = "Startbildschirm";
+        //StartText.text = "Startbildschirm";
         Option_A = GameObject.Find("Button_A").GetComponent<Button>();
         Option_B = GameObject.Find("Button_B").GetComponent<Button>();
         Option_C = GameObject.Find("Button_C").GetComponent<Button>();
@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
     }
 
     // Initialer StoryBlock
-    static StoryBlock block1 = new StoryBlock("Wie gehts?", "Gut", "Schlecht", "Mittelmäßig");
+    static StoryBlock block1 = new StoryBlock("Eine Bürgerinitiative fordert, dass 40% des Gemeinderats Juden und Jüdinnen sein sollen. Sind Sie für diese Quote?",
+     "A: Ja zur 40% Quote", "B: Nein zur 40% Quote", "C: Ja, aber niedrigere Quote und ein Mahnmal");
     static StoryBlock block2 = new StoryBlock("Developermode", "Load results", "Reset", "");
 
     void Start()
