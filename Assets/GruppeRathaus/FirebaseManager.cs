@@ -4,154 +4,82 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
 
-namespace GruppeRathaus{
-    public class FirebaseManager : MonoBehaviour
-{
-    public GameManager gameManager;
-    // Firebase URL (replace with your actual Firebase URL)
-    private string firebaseURL = "https://rathaus-33b2b-default-rtdb.europe-west1.firebasedatabase.app/";
+namespace GruppeRathaus {
+    public class FirebaseManager : MonoBehaviour {
+        public GameManager gameManager;
+        private string serverURL = "http://localhost/unity_server/";
 
-    public void SendChoiceToFirebase(string choice)
-    {
-        StartCoroutine(PostChoice(choice));
-    }
-
-
-    public void GetMostChosenOption()
-    {
-        StartCoroutine(GetMostChosenOptionRoutine());
-    }
-
-    public void ResetChoicesInFirebase()
-    {
-        StartCoroutine(ResetChoices());
-    }
-
-    IEnumerator PostChoice(string choice)
-    {
-        string url = firebaseURL + choice + ".json";
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError(request.error);
-        }
-        else
-        {
-            string jsonResponse = request.downloadHandler.text;
-            int currentCount = 0;
-            if (!string.IsNullOrEmpty(jsonResponse) && jsonResponse != "null")
-            {
-                currentCount = int.Parse(jsonResponse);
-            }
-
-            // Increment the choice count
-            currentCount++;
-            string updatedJson = currentCount.ToString();
-
-            UnityWebRequest putRequest = new UnityWebRequest(url, "PUT");
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(updatedJson);
-            putRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            putRequest.downloadHandler = new DownloadHandlerBuffer();
-            putRequest.SetRequestHeader("Content-Type", "application/json");
-
-            yield return putRequest.SendWebRequest();
-
-            if (putRequest.result == UnityWebRequest.Result.ConnectionError || putRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError(putRequest.error);
-            }
-            else
-            {
-                Debug.Log("Choice count updated successfully");
-            }
-        }
-    }
-
-
-    
-    IEnumerator GetMostChosenOptionRoutine()
-    {
-        string url = firebaseURL + ".json";
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError(request.error);
-        }
-        else
-        {
-            string jsonResponse = request.downloadHandler.text;
-            OptionCounts optionCounts = JsonUtility.FromJson<OptionCounts>(jsonResponse);
-
-            // Bestimme die am häufigsten gewählte Option
-            string mostChosenOption = GetMostChosenOption(optionCounts);
-            Debug.Log("Most chosen option: " + mostChosenOption);
-
-            // Aktualisiere das Szene-Panel mit der am häufigsten gewählten Option
-            gameManager.UpdateScenePanel(mostChosenOption);
-        }
-    }
-
-    public string GetMostChosenOption(OptionCounts optionCounts)
-    {
-        string mostChosenOption = "";
-        int maxCount = 0;
-
-        if (optionCounts.A > maxCount)
-        {
-            mostChosenOption = "A";
-            maxCount = optionCounts.B;
+        public void SendChoiceToFirebase(string choice) {
+            StartCoroutine(PostChoice(choice));
         }
 
-        if (optionCounts.B > maxCount)
-        {
-            mostChosenOption = "B";
-            maxCount = optionCounts.B;
+        public void GetMostChosenOption() {
+            StartCoroutine(GetMostChosenOptionRoutine());
         }
 
-        if (optionCounts.C > maxCount)
-        {
-            mostChosenOption = "C";
+        public void ResetChoicesInFirebase() {
+            StartCoroutine(ResetChoices());
         }
 
-        return mostChosenOption;
-    }
+        IEnumerator PostChoice(string choice) {
+            string url = serverURL + "choices.php";
+            Dictionary<string, string> postData = new Dictionary<string, string> {
+                { "choice", choice }
+            };
+            string json = JsonUtility.ToJson(postData);
 
-    [System.Serializable]
-    public class OptionCounts
-    {
-        public int A;
-        public int B;
-        public int C;
-    }
-
-    IEnumerator ResetChoices()
-    {
-        string[] choices = { "A", "B", "C" };
-        foreach (string choice in choices)
-        {
-            string url = firebaseURL + choice + ".json";
-            UnityWebRequest request = new UnityWebRequest(url, "PUT");
-            byte[] bodyRaw = Encoding.UTF8.GetBytes("0");
+            UnityWebRequest request = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
 
             yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
                 Debug.LogError(request.error);
+            } else {
+                Debug.Log("Choice sent successfully");
             }
-            else
-            {
-                Debug.Log($"{choice} count reset successfully");
+        }
+
+        IEnumerator GetMostChosenOptionRoutine() {
+            string url = serverURL + "most_chosen_option.php";
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
+                Debug.LogError(request.error);
+            } else {
+                string jsonResponse = request.downloadHandler.text;
+                MostChosenOptionResponse response = JsonUtility.FromJson<MostChosenOptionResponse>(jsonResponse);
+                string mostChosenOption = response.mostChosen;
+                Debug.Log("Most chosen option: " + mostChosenOption);
+
+                gameManager.UpdateScenePanel(mostChosenOption);
             }
+        }
+
+        IEnumerator ResetChoices() {
+            string url = serverURL + "reset-choices.php";
+            UnityWebRequest request = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = Encoding.UTF8.GetBytes("{}");
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
+                Debug.LogError(request.error);
+            } else {
+                Debug.Log("Choices reset successfully");
+            }
+        }
+
+        [System.Serializable]
+        public class MostChosenOptionResponse {
+            public string mostChosen;
         }
     }
 }
-}
-
