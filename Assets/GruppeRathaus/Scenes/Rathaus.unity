@@ -2063,13 +2063,13 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Sie haben nun den Zusammenhang zwischen dem T\xFCbinger Rathaus und den
-    T\xFCbinger Juden\r geh\xF6rt. Nun bitte ich sie, sich folgendes Szenario vorzustellen:
-    Juden, die T\xFCbingen in den 1980ern\r und 1990ern besucht haben, beschlie\xDFen,
-    doch aus ihrem Exil zur\xFCckzukommen, mit ihren\r Familien. Sie m\xF6chten aber,
-    dass sie auch Mitspracherechte in T\xFCbingen bekommen und das die\r Stadt auf
-    Sie eingeht. Mehrere J\xFCd/innen fordern eine Quote im Rathaus \u2013 der Stadtrat
-    soll zu mind.\r 30 % aus Juden bestehen. Sie sind T\xFCbinger B\xFCrger in den
-    1980er Jahren und m\xFCssen und wollen\r\nnun dar\xFCber entscheiden"
+    T\xFCbinger Juden\r geh\xF6rt.\n\nNun bitte ich sie, sich folgendes Szenario
+    vorzustellen: Juden, die T\xFCbingen in den 1980ern\r und 1990ern besucht haben,
+    beschlie\xDFen, doch aus ihrem Exil zur\xFCckzukommen, mit ihren\r Familien.
+    Sie m\xF6chten aber, dass sie auch Mitspracherechte in T\xFCbingen bekommen und
+    das die\r Stadt auf Sie eingeht. Mehrere J\xFCd/innen fordern eine Quote im Rathaus
+    \u2013 der Stadtrat soll zu mind.\r 40 % aus Juden bestehen.\n\nSie sind T\xFCbinger
+    B\xFCrger in den 1980er Jahren und m\xFCssen und wollen\r nun dar\xFCber entscheiden."
 --- !u!222 &2125072599
 CanvasRenderer:
   m_ObjectHideFlags: 0

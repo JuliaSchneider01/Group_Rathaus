@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GruppeRathaus {
     public class ServerManager : MonoBehaviour {
-        // Firebase URL (replace with your actual Firebase URL)
+       
         private string firebaseURL =  "https://digital-humanities.uni-tuebingen.de/ltt-rathaus/";
 
         public SurveyManager surveyManager;

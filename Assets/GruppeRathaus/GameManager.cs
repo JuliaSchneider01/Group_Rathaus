@@ -31,14 +31,12 @@ public class GameManager : MonoBehaviour
    
     StoryBlock currentBlock;
    
-    // Reference to FirebaseManager
     private FirebaseManager firebaseManager;
 
     void Awake()
     {
         
-        // Automatische Zuweisung des Buttons
-        //StartText.text = "Startbildschirm";
+        
         Option_A = GameObject.Find("Button_A").GetComponent<Button>();
         Option_B = GameObject.Find("Button_B").GetComponent<Button>();
         Option_C = GameObject.Find("Button_C").GetComponent<Button>();
@@ -53,13 +51,12 @@ public class GameManager : MonoBehaviour
         Option_B.gameObject.SetActive(false);
         Option_C.gameObject.SetActive(false);
         
-        // Initialize FirebaseManager
         firebaseManager = GetComponent<FirebaseManager>();
     }
 
     // Initialer StoryBlock
     static StoryBlock block1 = new StoryBlock("Eine Bürgerinitiative fordert, dass 40% des Gemeinderats Juden und Jüdinnen sein sollen. Sind Sie für diese Quote?",
-     "A: Ja zur 40% Quote", "B: Nein zur 40% Quote", "C: Ja, aber niedrigere Quote und ein Mahnmal");
+     "A: Ja zur 40% Quote", "B: Nein zur 40% Quote", "C: Ja, aber 30% Quote und ein Mahnmal");
     static StoryBlock block2 = new StoryBlock("Umfrage beendet!", "", "", "");
 
     void Start()
