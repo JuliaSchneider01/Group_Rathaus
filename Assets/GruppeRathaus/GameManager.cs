@@ -41,6 +41,8 @@ namespace GruppeRathaus
         private bool isOptionCConfirmed = false;
         private Color originalColor;
 
+        public string currentChoice;
+
         void Awake()
         {
 
@@ -66,7 +68,7 @@ namespace GruppeRathaus
         }
 
         // Initialer StoryBlock
-        static StoryBlock block1 = new StoryBlock("Eine Bürgerinitiative fordert, dass 40% des Gemeinderats Juden und Jüdinnen sein sollen.\nSind Sie für diese Quote?\n\nKlicken Sie einmal auf den Knopf um Ihre Antwort einzuloggen.\nKlicken Sie ein weiteres mal auf Ihre Auswahl um die Antwort zu bestätigen.",
+        static StoryBlock block1 = new StoryBlock("Eine Bürgerinitiative fordert, dass 40% des Gemeinderats Juden und Jüdinnen sein sollen.\nSind Sie für diese Quote?",
          "A: Ja zur 40% Quote", "B: Nein zur 40% Quote", "C: Ja, aber 30% Quote und ein Mahnmal");
         static StoryBlock block2 = new StoryBlock("Umfrage beendet!", "", "", "");
 
@@ -81,20 +83,32 @@ namespace GruppeRathaus
 
         void OnContinueButtonClicked()
         {
-            // Verstecke den Starttext und den Weiter-Button
-            StartText.gameObject.SetActive(false);
-            ContinueButton.gameObject.SetActive(false);
-            BackButton.gameObject.SetActive(false);
+
+            if(currentBlock != block1){
+
+                // Verstecke den Starttext und den Weiter-Button
+                StartText.gameObject.SetActive(false);
+                ContinueButton.gameObject.SetActive(false);
+                BackButton.gameObject.SetActive(false);
 
 
-            // Zeige die Story-UI-Elemente
-            ScenePanel.gameObject.SetActive(true);
-            Option_A.gameObject.SetActive(true);
-            Option_B.gameObject.SetActive(true);
-            Option_C.gameObject.SetActive(true);
+                // Zeige die Story-UI-Elemente
+                ScenePanel.gameObject.SetActive(true);
+                Option_A.gameObject.SetActive(true);
+                Option_B.gameObject.SetActive(true);
+                Option_C.gameObject.SetActive(true);
 
-            // Zeige den ersten StoryBlock
-            DisplayBlock(block1);
+                // Zeige den ersten StoryBlock
+                DisplayBlock(block1);
+
+            }
+            else {
+                DisplayNext();
+                firebaseManager.SendChoiceToFirebase(currentChoice);
+                ContinueButton.gameObject.SetActive(false);
+
+            }
+           
         }
 
         void DisplayBlock(StoryBlock block)
@@ -109,53 +123,29 @@ namespace GruppeRathaus
 
         public void ButtonA_clicked()
         {
-
-            Debug.Log("isOptionAConfirmed" + isOptionAConfirmed);
-            if (isOptionAConfirmed)
-            {
-                firebaseManager.SendChoiceToFirebase("A");
-                DisplayNext();
-
-            }
-            else
-            {
                 ResetButtonColors();
-                isOptionAConfirmed = true;
+                currentChoice = "A";
                 Option_A.GetComponent<Image>().color = Color.green;
-            }
+                ContinueButton.gameObject.SetActive(true);   
 
         }
 
         public void ButtonB_clicked()
         {
-            
-                if (isOptionBConfirmed)
-                {
-                    firebaseManager.SendChoiceToFirebase("B");
-                    DisplayNext();
-                }
-                else
-                {
-                    ResetButtonColors();
-                    isOptionBConfirmed = true;
-                    Option_B.GetComponent<Image>().color = Color.green;
-                }
-            
+                ResetButtonColors();
+                currentChoice = "B";
+                Option_B.GetComponent<Image>().color = Color.green;
+                ContinueButton.gameObject.SetActive(true); 
+
         }
 
         public void ButtonC_clicked()
         {
-                if (isOptionCConfirmed)
-                {
-                    firebaseManager.SendChoiceToFirebase("C");
-                    DisplayNext();
-                }
-                else
-                {
-                    ResetButtonColors();
-                    isOptionCConfirmed = true;
-                    Option_C.GetComponent<Image>().color = Color.green;
-                }
+                ResetButtonColors();
+                currentChoice = "C";
+                Option_C.GetComponent<Image>().color = Color.green;
+                ContinueButton.gameObject.SetActive(true); 
+                
             
         }
 

@@ -56,17 +56,17 @@ public class AudioController : MonoBehaviour
 
     public void ForwardAudio()
 {
-    if (audioSource.time + 30f <= audioSource.clip.length)
+    if (audioSource.time + 10f <= audioSource.clip.length)
     {
-        audioSource.time += 30f; 
+        audioSource.time += 10f; 
     }
 }
 
     void BackwardAudio()
 {
-    if (audioSource.time - 30f >= 0f)
+    if (audioSource.time - 10f >= 0f)
     {
-        audioSource.time -= 30f; 
+        audioSource.time -= 10f; 
     }
 }
 }
