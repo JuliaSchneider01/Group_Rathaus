@@ -36,9 +36,6 @@ namespace GruppeRathaus
 
         private FirebaseManager firebaseManager;
 
-        private bool isOptionAConfirmed = false;
-        private bool isOptionBConfirmed = false;
-        private bool isOptionCConfirmed = false;
         private Color originalColor;
 
         public string currentChoice;
@@ -151,9 +148,6 @@ namespace GruppeRathaus
 
         public void ResetButtonColors()
         {
-            isOptionAConfirmed = false;
-            isOptionBConfirmed = false;
-            isOptionCConfirmed = false;
             Option_A.GetComponent<Image>().color = originalColor;
             Option_B.GetComponent<Image>().color = originalColor;
             Option_C.GetComponent<Image>().color = originalColor;
